@@ -2,8 +2,10 @@ class EscenaInicial extends Phaser.Scene{
 
     // Cargamos los recursos del juego (sprites, audios, mapas, etc...)
     preload(){
-        this.load.image("fondo","assets/background/Space-Background-1.jpg")
-        this.load.spritesheet("snape", "assets/sprites/snape.png", {frameWidth:30, frameHeight:48})
+        this.load.image("fondo","assets/background/Space-Background-1.jpg")//pone el fondo 
+        this.load.spritesheet("snape", "assets/sprites/snape.png", {frameWidth:32, frameHeight:48})
+
+        this.load.image("nave", "assets/sprites/fighterspr1.png")
     }
 
     //Se ejecuta una sola vez al comienzo del juego.
@@ -13,8 +15,15 @@ class EscenaInicial extends Phaser.Scene{
         this.add.sprite(150, 150, "fondo")//el 300 y 400 son las coordenadas,es la posicion.y indicamos el nombre de la imagen.
         this.snape = this.add.sprite(500, 150, "snape")
 
-        this.teclas = this.input.keyboard.createCursorKeys()
+        this.keyd = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
+        this.keya = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
+        this.keyw = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W)
+        this.keys = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S)
 
+
+
+        this.teclas = this.input.keyboard.createCursorKeys() //teclado
+        //animaciones
         this.anims.create({
             key: "izquierda",
             frames: this.anims.generateFrameNames("snape", {start:0, end:3}),
@@ -24,44 +33,71 @@ class EscenaInicial extends Phaser.Scene{
 
         this.anims.create({
             key: "derecha",
-            frames: this.anims.generateFrameNames("snape", {start:5, end:8}),
+            frames: this.anims.generateFrameNames("snape", {start:5, end:7}),
             frameRate:10
 
         })
 
-        this.anims.create({
-            key: "arriba",
-            frames: this.anims.generateFrameNames("snape", {start:0, end:3}),
-            frameRate:10
-
-        })
         this.anims.create({
             key: "abajo",
-            frames: this.anims.generateFrameNames("snape", {start:5, end:8}),
-            frameRate:10
+            frames: this.anims.generateFrameNames("snape", {start:4, end:4}),
+            frameRate:20
+
+        })
+        this.anims.create({
+            key: "arriba",
+            frames: this.anims.generateFrameNames("snape", {start:4, end:4}),
+            frameRate:20
 
         })
 
-
-
-
+        this.nave = this.add.sprite(150, 150, "nave") //muestra la nave en pantalla
+        this.nave.setScale(0.2)
 
     }
+
+    
 
     //Se ejecuta de manera constante durante todo el tiempo del videojuego
     // acciones del personaje, colisiones entre otros eventos
     // que se necesiten
     update(){
+
+        if (this.keyd.isDown){
+            this.nave.x+=5
+        }
+        if (this.keya.isDown){
+            this.nave.x-=5
+        }
+        if (this.keyw.isDown){
+            this.nave.y-=5
+        }
+        if (this.keys.isDown){
+            this.nave.y+=5
+        }
+
         if (this.teclas.left.isDown){
             this.snape.anims.play("izquierda")
-            this.snape.x -= 3
-        }else if (this.teclas.right.isDown){
-            this.snape.anims.play("derecha")
-            this.snape.x += 3
+            this.snape.x -= 5
+
+        }else if (this.teclas.up.isDown){
+            this.snape.anims.play("arriba")
+            this.snape.y-= 5
         }
-    
+
+        else if (this.teclas.down.isDown){
+            this.snape.anims.play("abajo")
+            this.snape.y -= -5
+        }
+
+        else if (this.teclas.right.isDown){
+            this.snape.anims.play("derecha")
+            this.snape.x -= -5
+        }
     }
-}
+ }
+
+
 
 //Configuracion inicial del juego. Es un objeto JSON
 const config = {
@@ -75,7 +111,7 @@ const config = {
             debug: true,
             
         },
-    }
+    },
 };
 
 new Phaser.Game(config);
