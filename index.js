@@ -5,7 +5,10 @@ class EscenaInicial extends Phaser.Scene{
         this.load.image("fondo","assets/background/Space-Background-1.jpg")//pone el fondo 
         this.load.spritesheet("snape", "assets/sprites/snape.png", {frameWidth:32, frameHeight:48})
 
-        this.load.image("nave", "assets/sprites/fighterspr1.png")
+        this.load.image("nave", "assets/sprites/fighterspr1.png")//pone la nave
+
+        this.load.image("disparo", "assets/sprites/shot.png")//pone los disparos de la nave
+
     }
 
     //Se ejecuta una sola vez al comienzo del juego.
@@ -14,6 +17,8 @@ class EscenaInicial extends Phaser.Scene{
     create(){
         this.add.sprite(150, 150, "fondo")//el 300 y 400 son las coordenadas,es la posicion.y indicamos el nombre de la imagen.
         this.snape = this.add.sprite(500, 150, "snape")
+
+        this.disparos = this.physics.add.group();//crea un grupo para los disparos
 
         this.keyd = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D)
         this.keya = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A)
@@ -51,9 +56,17 @@ class EscenaInicial extends Phaser.Scene{
 
         })
 
-        this.nave = this.add.sprite(150, 150, "nave") //muestra la nave en pantalla
+        this.nave = this.add.sprite(180, 150, "nave") //muestra la nave en pantalla y donde posicionarlo
         this.nave.setScale(0.2)
 
+
+        //this.disparo = this.add.sprite(150, 150, "disparo")
+        //this.disparo.setScale(0.3)// para achicar el disparo
+
+
+        this.space_disparo = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+
+        
     }
 
     
@@ -94,6 +107,17 @@ class EscenaInicial extends Phaser.Scene{
             this.snape.anims.play("derecha")
             this.snape.x -= -5
         }
+
+        if (this.space_disparo.isDown){
+            console.log("disparo")
+            this.disparo = this.physics.add.sprite(this.nave.x+50,this.nave.y, "disparo").setScale(0.1)
+            
+        }
+
+        if (this.disparo){
+            this.disparo.x += 3
+        }
+
     }
  }
 
